@@ -1,8 +1,8 @@
-we created a todo app
+#we created a todo app
 it has a client and server made using react and express respectively 
 
-STEP ONE : 
-we tried dockerizing locally(not for production mode)
+##STEP ONE : 
+##we tried dockerizing locally(not for production mode)
 
 1. we created dockerfiles for both client and server
 2. we created a .dockerignore files for both as well 
@@ -12,3 +12,4 @@ rather than us manually running docker build to build both the images and runs t
   --build : builds the image for client and server
   up : runs the container for their images
 5. docker-compose down : stops and removes the containers 
+
