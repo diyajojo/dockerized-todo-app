@@ -15,6 +15,10 @@
     COPY --from=deps /app/index.js ./index.js
     
     EXPOSE 3000
+
+    
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
+CMD wget --quiet --spider http://localhost:3000/ || exit 1
     
     CMD ["node", "index.js"]
 

@@ -1,20 +1,16 @@
-# Use Node image
-FROM node:18
+FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest
 COPY . .
 
-# Expose port (e.g., 5000 for Express)
-EXPOSE 5000
+EXPOSE 3000
 
-# Start the server
-CMD ["node", "index.js"]
-# CMD ["npm", "run", "dev"]
-# CMD ['npm','start'] 
+# 👇 Add healthcheck using curl to verify Express is up
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
+
+CMD ["npm", "start"]
