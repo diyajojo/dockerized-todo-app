@@ -22,7 +22,7 @@ function App() {
   // Add a new todo via backend
   const addTodo = async (text) => {
     try {
-      const res = await fetch('/api/todos', {
+      const res = await fetch(`/api/todos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),

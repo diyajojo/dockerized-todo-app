@@ -1,7 +1,9 @@
 version: "3.8"
 services:
   backend:
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes: 
@@ -9,10 +11,14 @@ services:
     command: npm start
 
   frontend:
-    build: ./client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
     ports:
       - "5173:5173"
     volumes:
       - ./client:/app
       - /app/node_modules
     command: npm run dev
+    env_file:
+      - ./CLIENT/.env

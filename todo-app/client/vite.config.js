@@ -13,10 +13,15 @@ export default defineConfig({
     host:true,
     port: 5173,
     proxy: {
-      '/api': 'http://backend:3000',
+      '/api': {
+        target: 'http://backend:3000',
+        changeOrigin: true,
+        secure: false,
+      },
     },
+    
   },
   build: {
-    outDir: 'dist',
+    outDir: 'dist', 
   },
 }); 
