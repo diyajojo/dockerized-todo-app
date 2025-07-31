@@ -9,11 +9,16 @@ services:
         condition: service_started #frontend depends on backend to start
 
   backend:
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/todoDB #tells backend to connect to mongodb runnng at 27017 port and todoDB is the database name
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - ./server/.env #tells backend to connect to mongodb runnng at 27017 port and todoDB is the database name
     depends_on:
       mongo:
         condition: service_started

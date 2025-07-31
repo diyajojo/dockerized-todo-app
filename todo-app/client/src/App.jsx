@@ -6,19 +6,22 @@ import './App.css';
 
 
 function App() {
-  const [todos, setTodos] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('todos')) || [];
-    } catch {
-      return [];
-    }
-  });
+  const [todos, setTodos] = useState([]);
 
-  // Persist todos to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
+    const fetchTodos = async () => {
+      try {
+        const res = await fetch('/api/todos');
+        const data = await res.json();
+        setTodos(data);
+      } catch (err) {
+        console.error('Failed to fetch todos:', err);
+      }
+    };
+  
+    fetchTodos();
+  }, []);
+  
   // Add a new todo via backend
   const addTodo = async (text) => {
     try {
@@ -41,7 +44,7 @@ function App() {
     try {
       const res = await fetch(`/api/todos/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        setTodos((prev) => prev.filter((t) => t.id !== id));
+        setTodos((prev) => prev.filter((t) => t._id !== id));
       }
     } catch (err) {
       console.error('Delete todo failed', err);
@@ -58,7 +61,7 @@ function App() {
       });
       if (res.ok) {
         const { todo: updated } = await res.json();
-        setTodos((prev) => prev.map((t) => (t.id === id ? updated : t)));
+        setTodos((prev) => prev.map((t) => (t._id === id ? updated : t)));
       }
     } catch (err) {
       console.error('Edit todo failed', err);

@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
+const Todo = require('./models/Todo');
+
 
 const mongoose = require('mongoose');
 const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/tododb';
@@ -26,39 +28,53 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-// Add new todo
-app.post('/api/todos', (req, res) => {
-  console.log('Received request to add todo',req.body);
-  const { text } = req.body;
-  if (!text || !text.trim()) {
-    return res.status(400).json({ error: 'Text is required' });
+app.post('/api/todos', async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text || !text.trim()) {
+      return res.status(400).json({ error: 'Text is required' });
+    }
+
+    const newTodo = await Todo.create({ text: text.trim() });
+    res.status(201).json({ message: 'Todo added', todo: newTodo });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
   }
-  const newTodo = { id: Date.now(), text: text.trim() };
-  // Return the created todo without persisting
-  res.status(201).json({ message: 'Todo added', todo: newTodo });
 });
 
-// Update existing todo
-app.put('/api/todos/:id', (req, res) => {
-  console.log('Received request to update todo',req.body);
-  const id = Number(req.params.id);
-  const { text } = req.body;
-  if (!text || !text.trim()) {
-    return res.status(400).json({ error: 'Text is required' });
+// Get all todos
+app.get('/api/todos', async (req, res) => {
+  try {
+    const todos = await Todo.find().sort({ createdAt: -1 });
+    res.json(todos);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
   }
-  const updated = { id, text: text.trim() };
-  res.json({ message: 'Todo updated', todo: updated });
+});
+
+// Update todo
+app.put('/api/todos/:id', async (req, res) => {
+  try {
+    const updated = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { text: req.body.text.trim() },
+      { new: true }
+    );
+    res.json({ message: 'Todo updated', todo: updated });
+  } catch (err) {
+    res.status(500).json({ error: 'Update failed' });
+  }
 });
 
 // Delete todo
-app.delete('/api/todos/:id', (req, res) => {
-  console.log('Received request to delete todo',req.params.id);
-  const id = Number(req.params.id);
-  // Simply acknowledge deletion; no server-side list to modify
-  res.json({ message: 'Todo deleted', id });
+app.delete('/api/todos/:id', async (req, res) => {
+  try {
+    await Todo.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Todo deleted', id: req.params.id });
+  } catch (err) {
+    res.status(500).json({ error: 'Delete failed' });
+  }
 });
-
-// No static file serving needed for this test project
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

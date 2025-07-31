@@ -13,3 +13,27 @@ rather than us manually running docker build to build both the images and runs t
   up : runs the container for their images
 5. docker-compose down : stops and removes the containers 
 
+##STEP TWO:  (cleaned it a bit for production level):
+
+1. we created two dockerfiles (one for prod and one for dev)
+2. in prod dockerfile , we used mutli image staging 
+3. we added healthcheckup which checks if the server is running healty every 5 seconds
+4. added proxy for api calling in frontend 
+
+## STEP THREE :(connectong mongodb docker service for our app locally ) :
+ 1. modified docker-compose file to include mongo service 
+ 
+
+
+
+
+
+docker-compose up --build : rebuilds the same image and runs container
+docker-compose : also rebuilds the same image after reading docker-compose.yml file 
+docker-compose down : stops and deletes the container from running , doesnt delete the image but 
+image name is based on the format :<project-name>/<service-name> (see in docker desktop)
+
+
+
+
+

@@ -18,22 +18,22 @@ function TodoList({ todos, deleteTodo, editTodo }) {
   return (
     <ul className="todo-list">
       {todos.map((todo) => (
-        <li key={todo.id}>
-          {editingId === todo.id ? (
+        <li key={todo._id}>
+          {editingId === todo._id ? (
             <>
               <input
                 type="text"
                 value={newText}
                 onChange={(e) => setNewText(e.target.value)}
               />
-              <button onClick={() => handleEdit(todo.id)}>Save</button>
+              <button onClick={() => handleEdit(todo._id)}>Save</button>
               <button onClick={() => setEditingId(null)}>Cancel</button>
             </>
           ) : (
             <>
               <span>{todo.text}</span>
-              <button onClick={() => startEdit(todo.id, todo.text)}>Edit</button>
-              <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+              <button onClick={() => startEdit(todo._id, todo.text)}>Edit</button>
+              <button onClick={() => deleteTodo(todo._id)}>Delete</button>
             </>
           )}
         </li>
