@@ -1,7 +1,20 @@
 const express = require('express');
 const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
-// No in-memory storage needed; frontend retains the source of truth
+const mongoose = require('mongoose');
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/tododb';
+
+mongoose.connect(MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch((err) => console.error('MongoDB connection error:', err));
+
+
+
 
 const app = express();
 app.use(cors());
