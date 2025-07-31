@@ -20,9 +20,17 @@ rather than us manually running docker build to build both the images and runs t
 3. we added healthcheckup which checks if the server is running healty every 5 seconds
 4. added proxy for api calling in frontend 
 
-## STEP THREE :(connectong mongodb docker service for our app locally ) :
- 1. modified docker-compose file to include mongo service 
+## STEP THREE: (connecting mongodb docker service for our app locally)
+
+1. modified docker-compose file to include mongo service 
+2. made changes in codebase to save edit and delete todo from a database named todos in mongodb
+3. no more localstorage setup - all data now persists in MongoDB 
+4. screenshot of how to see the databse in terminal 
+![MongoDB Architecture](.client/public/mongo.png)
+5. or else open the mongo compass GUI
+
  
+
 
 
 
