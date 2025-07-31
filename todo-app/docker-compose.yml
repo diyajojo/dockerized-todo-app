@@ -1,32 +1,31 @@
-version: "3.8"
-
+version: '3'
 services:
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-    volumes: 
-      - ./server:/app
-    command: npm start
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 5s
-
   frontend:
-    build:
-      context: ./client
-      dockerfile: Dockerfile.dev
+    build: ./client
     ports:
       - "5173:5173"
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    command: npm run dev
     depends_on:
       backend:
-        condition: service_healthy
+        condition: service_started #frontend depends on backend to start
+
+  backend:
+    build: ./server
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/todoDB #tells backend to connect to mongodb runnng at 27017 port and todoDB is the database name
+    depends_on:
+      mongo:
+        condition: service_started
+
+  mongo:
+    image: mongo #pulling image from dockerhub named mongo
+    ports:
+      - "27017:27017" # port binding 
+      
+    volumes:
+      - mongo-data:/data/db  #volumes is like a storage spot to save the data if the mongo service is stopped to load the data , its outside mongo but inside docker
+      #volumes are like a storage spot for your container to save data if servie stop running at any point of time
+
+volumes:
+  mongo-data:  # name of volume is mongo-data (initialization so that docker knows and data/db is the path name in our system where data is stored by mongodb by default )
