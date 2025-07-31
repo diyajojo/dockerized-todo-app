@@ -25,8 +25,10 @@ rather than us manually running docker build to build both the images and runs t
 1. modified docker-compose file to include mongo service 
 2. made changes in codebase to save edit and delete todo from a database named todos in mongodb
 3. no more localstorage setup - all data now persists in MongoDB 
-4. screenshot of how to see the databse in terminal 
-![MongoDB Architecture](.client/public/mongo.png)
+4. screenshot of how to see the database in terminal:
+
+![MongoDB Terminal View](./docs/images/mongo-terminal.png)
+
 5. or else open the mongo compass GUI
 
  
